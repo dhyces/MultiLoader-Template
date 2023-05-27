@@ -1,3 +1,29 @@
+plugins {
+    id 'com.matyrobbrt.mc.registrationutils' version "${registration_utils}"
+    id 'org.groovymc.modsdotgroovy' version "${mods_dot_groovy_version}"
+}
+
+registrationUtils {
+    group 'dhyces.modhelper.registration'
+    projects {
+        Fabric { type 'fabric' }
+        Quilt { type 'fabric' }
+        Forge { type 'forge' }
+        Common { type 'common' }
+    }
+}
+
+modsDotGroovy {
+    dslVersion = "${dsl_version}"
+    platform 'multiloader'
+    multiloader {
+        common = project(':Common')
+        quilt = [project(':Quilt')]
+        forge = [project(':Forge')]
+        fabric = [project(':Fabric')]
+    }
+}
+
 subprojects {
     
     apply plugin: 'java'
@@ -35,6 +61,7 @@ subprojects {
     repositories {
 
         mavenCentral()
+        mavenLocal()
 
         maven {
             name = 'Sponge / Mixin'

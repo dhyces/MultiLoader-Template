@@ -19,6 +19,8 @@ minecraft {
             }
         }
     }
+
+//    accessWideners(file("src/main/resources/modid.accesswidener"))
 }
 
 dependencies {

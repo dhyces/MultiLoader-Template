@@ -4,16 +4,6 @@ plugins {
 
 archivesBaseName = "${mod_id}-Quilt"
 
-sourceSets {
-    main {
-        resources {
-            srcDirs += [
-                    "$rootDir/Common/src/main/resources"
-            ]
-        }
-    }
-}
-
 loom {
     runs {
         client {
@@ -35,13 +25,13 @@ dependencies {
     minecraft 'com.mojang:minecraft:1.19.3'
     mappings loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.19.3:2023.02.05@zip")
+        parchment("org.parchmentmc.data:parchment-1.19.3:2023.03.12@zip")
     }
 
     modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
 
 	modImplementation ("org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_version}-${minecraft_version}") {
-		exclude group: "org.quiltmc", module:" qsl"
+		exclude group: "org.quiltmc", module: "qsl"
 	}
 	modImplementation ("org.quiltmc:qsl:${qsl_version}+${minecraft_version}") {
 		exclude group: "net.fabricmc"
