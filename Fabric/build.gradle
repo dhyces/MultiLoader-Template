@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.2.+'
     id 'maven-publish'
     id 'idea'
 }
@@ -14,11 +14,7 @@ dependencies {
     }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation 'com.google.code.findbugs:jsr305:3.0.1'
-//    implementation "blue.endless:jankson:1.2.1"
-//    if (property("homeSystem") == "true") {
-//        implementation "dhyces:JanksonFixerUpper:1.0.0"
-//    }
+
     implementation project(":Common")
 }
 
