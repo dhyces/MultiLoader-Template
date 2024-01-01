@@ -20,8 +20,12 @@ pluginManagement {
         maven {
             url = 'https://maven.parchmentmc.org'
         }
+        maven {
+            name = 'Architectury'
+            url = "https://maven.architectury.dev/"
+        }
     }
 }
 
 rootProject.name = 'MultiLoader'
-include("Common", "Fabric", "Forge", "Quilt")
+include("Common", "Fabric", "Neo"/*, "Quilt"*/)

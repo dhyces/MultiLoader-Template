@@ -5,46 +5,71 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_name}-fabric-${libs.versions.minecraft.release.get()}"
+    archivesName = "${mod_name}-neo-${libs.versions.minecraft.release.get()}"
 }
 
 loom {
-//    accessWidenerPath = project(":Common").file("src/main/resources/modid.accesswidener")
-
     runs {
         client {
             client()
-            setConfigName("Fabric Client")
+            setConfigName("Neo Client")
             ideConfigGenerated(true)
             runDir("run")
         }
         server {
             server()
-            setConfigName("Fabric Server")
+            setConfigName("Neo Server")
             ideConfigGenerated(true)
             runDir("run")
         }
+        data {
+            data()
+            setConfigName("Neo Data")
+            ideConfigGenerated(true)
+            runDir("run")
+
+            programArgs("'--mod', ${mod_id}, '--all', '--output', ${project(":Common").file('src/generated/resources/')}, '--existing', ${file('src/main/resources/')}")
+        }
+    }
+}
+
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
+repositories {
+    maven {
+        name = 'Neo'
+        url = 'https://maven.neoforged.net/releases'
     }
 }
 
 dependencies {
     minecraft libs.minecraft
+    neoForge libs.neoforge
     mappings loom.layered() {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.release.get()}@zip")
     }
-    modImplementation libs.fabric.loader
-    modImplementation libs.fabric.api
 
-    implementation project(":Common")
+    compileOnly(project(":Common"))
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":Common").sourceSets.main.allSource)
 }
 
 processResources {
     from project(":Common").sourceSets.main.resources
 }
 
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+sourcesJar {
+    from(rootProject.file("LICENSE")) {
+        rename { "${it}_${mod_name}" }
+    }
 }
 
 publishing {
@@ -53,10 +78,9 @@ publishing {
             groupId project.group
             artifactId project.archivesBaseName
             version project.version
-            from components.java
+            artifact jar
         }
     }
-
     repositories {
         maven {
             url "file://" + System.getenv("local_maven")
