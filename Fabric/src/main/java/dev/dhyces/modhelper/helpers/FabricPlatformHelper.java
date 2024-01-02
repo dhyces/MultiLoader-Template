@@ -1,6 +1,6 @@
-package dhyces.modhelper.helpers;
+package dev.dhyces.modhelper.helpers;
 
-import dhyces.modhelper.services.helpers.PlatformHelper;
+import dev.dhyces.modhelper.services.helpers.PlatformHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 

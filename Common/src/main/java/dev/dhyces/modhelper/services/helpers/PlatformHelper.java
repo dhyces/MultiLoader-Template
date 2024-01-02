@@ -1,4 +1,4 @@
-package dhyces.modhelper.services.helpers;
+package dev.dhyces.modhelper.services.helpers;
 
 public interface PlatformHelper {
     boolean isModLoaded(String modid);

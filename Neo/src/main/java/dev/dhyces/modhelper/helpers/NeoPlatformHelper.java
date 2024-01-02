@@ -1,6 +1,6 @@
-package dhyces.modhelper.helpers;
+package dev.dhyces.modhelper.helpers;
 
-import dhyces.modhelper.services.helpers.PlatformHelper;
+import dev.dhyces.modhelper.services.helpers.PlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
