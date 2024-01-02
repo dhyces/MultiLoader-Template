@@ -1,8 +1,10 @@
+import modsdotgroovy.Dependency
+
 ModsDotGroovy.make {
     def modid = this.buildProperties["mod_id"]
 
     modLoader = "javafml"
-    loaderVersion = "[${(this.buildProperties["forge_version"] as String).split("\\.")[0]},)"
+    loaderVersion = "[1,)"
 
     license = "MIT"
     issueTrackerUrl = ""
@@ -12,7 +14,7 @@ ModsDotGroovy.make {
         displayName = this.buildProperties["mod_name"]
         version = this.version
         group = this.group
-        authors = [this.buildProperties["mod_author"] as String]
+        authors = [this.buildProperties["authors"] as String]
 
         displayUrl = ""
         sourcesUrl = ""
@@ -33,12 +35,15 @@ ModsDotGroovy.make {
         dependencies {
             onForge {
                 minecraft = this.minecraftVersionRange
-                forge = "[${this.forgeVersion},)"
+                forge = ">=${this.libs.versions.neoforge}"
             }
 
             onFabric {
                 minecraft = this.minecraftVersion
                 fabricloader = ">=${this.fabricLoaderVersion}"
+                mod('fabric-api') {
+                    versionRange = ">=${this.libs.versions.fabric.api.split("+")[0]}"
+                }
             }
 
             onQuilt {
@@ -47,6 +52,23 @@ ModsDotGroovy.make {
                 quilted_fabric_api = ">=${this.buildProperties["quilted_fabric_version"]}"
                 quilt_base = ">=${this.buildProperties["qsl_version"]}"
             }
+        }
+
+        dependencies = dependencies.collect {dep ->
+            new Dependency() {
+                @Override
+                Map asForgeMap() {
+                    def map = super.asForgeMap()
+                    map.remove("mandatory")
+                    map.put("type", this.mandatory ? "required" : "optional")
+                }
+            }
+        }.tap {
+            it.modId = dep.modId
+            it.mandatory = dep.mandatory
+            it.versionRange = dep.versionRange
+            it.ordering = dep.ordering
+            it.side = dep.side
         }
     }
 
