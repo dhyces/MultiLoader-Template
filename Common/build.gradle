@@ -23,7 +23,7 @@ loom {
 //    accessWidenerPath = file("src/main/resources/trimmed.accesswidener")
 
 //    mixin {
-//        defaultRefmapName = "trimmed.refmap.json"
+//        defaultRefmapName = "modid.refmap.json"
 //    }
 
     runConfigs.configureEach {
@@ -37,6 +37,8 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.release.get()}@zip")
     }
+
+    modCompileOnly libs.mixinextras.common
 
     modCompileOnly libs.fabric.loader
 }
