@@ -21,15 +21,11 @@ ModsDotGroovy.make {
         logoFile = "logo.png"
         description = ""
 
-        onFabricAndQuilt {
+        onFabric {
             entrypoints {
                 main = ""
                 client = ""
             }
-        }
-
-        onQuilt {
-            intermediateMappings = "net.fabricmc:intermediary"
         }
 
         dependencies {
@@ -45,34 +41,23 @@ ModsDotGroovy.make {
                     versionRange = ">=${this.libs.versions.fabric.api.split("+")[0]}"
                 }
             }
-
-            onQuilt {
-                minecraft = this.minecraftVersion
-                quilt_loader = ">=${this.quiltLoaderVersion}"
-                quilted_fabric_api = ">=${this.buildProperties["quilted_fabric_version"]}"
-                quilt_base = ">=${this.buildProperties["qsl_version"]}"
-            }
         }
 
-        dependencies = dependencies.collect {dep ->
+        dependencies = dependencies.collect { dep ->
             new Dependency() {
                 @Override
                 Map asForgeMap() {
-                    def map = super.asForgeMap()
-                    map.remove("mandatory")
-                    map.put("type", this.mandatory ? "required" : "optional")
+                    def map = dep.asForgeMap()
+                    def mandatory = map.mandatory
+                    map.remove('mandatory')
+                    map.put('type', mandatory ? 'required' : 'optional')
+                    return map
                 }
             }
-        }.tap {
-            it.modId = dep.modId
-            it.mandatory = dep.mandatory
-            it.versionRange = dep.versionRange
-            it.ordering = dep.ordering
-            it.side = dep.side
         }
     }
 
-    onFabricAndQuilt {
+    onFabric {
         environment = "*"
         mixin = [
                 modid + ".mixins.json"
