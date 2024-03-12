@@ -2,10 +2,6 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            name = 'Forge'
-            url = 'https://maven.minecraftforge.net/'
-        }
-        maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
@@ -28,4 +24,4 @@ pluginManagement {
 }
 
 rootProject.name = 'MultiLoader'
-include("Common", "Fabric", "Neo"/*, "Quilt"*/)
+include("Common", "Fabric", "Neo")

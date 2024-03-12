@@ -6,14 +6,10 @@ publish_range = "1.20.4"
 parchment_release = "2023.12.10"
 parchment_minecraft = "1.20.2"
 
-neoforge = "20.4.147-beta"
+neoforge = "20.4.198"
 
-fabric_loader = "0.15.5"
-fabric_api = "0.95.4+1.20.4"
-
-#quilt_loader = "0.20.2"
-#quilt_qsl = "6.2.1"
-#quilt_fabric = "7.2.1+0.88.1"
+fabric_loader = "0.15.7"
+fabric_api = "0.96.4+1.20.4"
 
 mixinextras = "0.3.2"
 
@@ -31,7 +27,6 @@ minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft_release"
 neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
-#quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
 mixinextras_common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinextras" }
 
