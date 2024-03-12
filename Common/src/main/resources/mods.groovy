@@ -43,15 +43,17 @@ ModsDotGroovy.make {
             }
         }
 
-        dependencies = dependencies.collect { dep ->
-            new Dependency() {
-                @Override
-                Map asForgeMap() {
-                    def map = dep.asForgeMap()
-                    def mandatory = map.mandatory
-                    map.remove('mandatory')
-                    map.put('type', mandatory ? 'required' : 'optional')
-                    return map
+        onForge {
+            dependencies = dependencies.collect { dep ->
+                new Dependency() {
+                    @Override
+                    Map asForgeMap() {
+                        def map = dep.asForgeMap()
+                        def mandatory = map.mandatory
+                        map.remove('mandatory')
+                        map.put('type', mandatory ? 'required' : 'optional')
+                        return map
+                    }
                 }
             }
         }
