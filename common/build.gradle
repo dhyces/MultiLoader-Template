@@ -1,5 +1,4 @@
 plugins {
-    id 'maven-publish'
     id "shared.conventions"
     alias(libs.plugins.mdg)
     alias(libs.plugins.archloom)
@@ -14,7 +13,11 @@ modsDotGroovy {
         gather {
             projectProperty("mod_id")
             projectProperty("mod_name")
-            projectProperty("mod_author")
+            projectProperty("authors")
+            projectProperty("at_enabled")
+            projectProperty("common_mixin_enabled")
+            projectProperty("fabric_mixin_enabled")
+            projectProperty("neoforge_mixin_enabled")
         }
         expose()
     }

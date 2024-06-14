@@ -10,18 +10,22 @@ MultiplatformModsDotGroovy.make {
     issueTrackerUrl = ""
 
     onFabric {
-        accessWidener = "${modid}.accesswidener"
+        if (Boolean.parseBoolean(buildProperties["at_enabled"] as String)) {
+            accessWidener = "${modid}.accesswidener"
+        }
     }
     onNeoForge {
         accessTransformers {
-            accessTransformer("META-INF/accessTransformer.cfg")
+            if (Boolean.parseBoolean(buildProperties["at_enabled"] as String)) {
+                accessTransformer("META-INF/accessTransformer.cfg")
+            }
         }
     }
 
     mod {
         modId = modid
         displayName = buildProperties["mod_name"]
-        authors = (buildProperties["authors"] as String).split(",")
+        authors = [(buildProperties["authors"] as String)]
         version = environmentInfo.version
 
         displayUrl = ""
@@ -52,18 +56,26 @@ MultiplatformModsDotGroovy.make {
         }
     }
 
-    onNeoForge {
+    if (Boolean.parseBoolean(buildProperties["common_mixin_enabled"] as String)) {
         mixins {
             mixin("${modid}.mixins.json")
-            mixin("${modid}.neo.mixins.json")
+        }
+    }
+
+    onNeoForge {
+        if (Boolean.parseBoolean(buildProperties["neoforge_mixin_enabled"] as String)) {
+            mixins {
+                mixin("${modid}.neo.mixins.json")
+            }
         }
     }
 
     onFabric {
         environment = Environment.ANY
-        mixins {
-            mixin("${modid}.mixins.json")
-            mixin("${modid}.fabric.mixins.json")
+        if (Boolean.parseBoolean(buildProperties["fabric_mixin_enabled"] as String)) {
+            mixins {
+                mixin("${modid}.fabric.mixins.json")
+            }
         }
     }
 }
