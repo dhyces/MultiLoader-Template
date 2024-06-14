@@ -1,3 +1,5 @@
+import org.groovymc.modsdotgroovy.gradle.tasks.AbstractGatherPlatformDetailsTask
+
 plugins {
     id 'idea'
     id 'maven-publish'
@@ -10,12 +12,26 @@ base {
     archivesName = "${mod_name}-fabric-${libs.versions.minecraft.release.get()}"
 }
 
+modsDotGroovy {
+    platform(org.groovymc.modsdotgroovy.types.core.Platform.FABRIC)
+    inferGather.set(false)
+    multiplatform {
+        from(":common")
+    }
+    apply()
+}
+
+tasks.named("gatherFabricPlatformDetails", AbstractGatherPlatformDetailsTask).configure {
+    minecraftVersion = libs.versions.minecraft.release
+    platformVersion = libs.versions.fabric.loader
+}
+
 loom {
     if (Boolean.parseBoolean(at_enabled)) {
         accessWidenerPath = project(":common").file("src/main/resources/${mod_id}.accesswidener")
     }
 
-    if (Boolean.parseBoolean(fabric_mixin_enabled)) {
+    if (Boolean.parseBoolean(common_mixin_enabled) || Boolean.parseBoolean(fabric_mixin_enabled)) {
         mixin {
             defaultRefmapName = "${mod_id}.refmap.json"
         }

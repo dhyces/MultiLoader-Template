@@ -1,24 +1,32 @@
-import modsdotgroovy.Dependency
-
-ModsDotGroovy.make {
-    def modid = this.buildProperties["mod_id"]
+MultiplatformModsDotGroovy.make {
+    def modid = buildProperties["mod_id"]
 
     modLoader = "javafml"
-    loaderVersion = "[1,)"
+    onNeoForge {
+        loaderVersion = libs.versions.get("javafml_range")
+    }
 
     license = "MIT"
     issueTrackerUrl = ""
 
+    onFabric {
+        accessWidener = "${modid}.accesswidener"
+    }
+    onNeoForge {
+        accessTransformers {
+            accessTransformer("META-INF/accessTransformer.cfg")
+        }
+    }
+
     mod {
         modId = modid
-        displayName = this.buildProperties["mod_name"]
-        version = this.version
-        group = this.group
-        authors = [this.buildProperties["authors"] as String]
+        displayName = buildProperties["mod_name"]
+        authors = (buildProperties["authors"] as String).split(",")
+        version = environmentInfo.version
 
         displayUrl = ""
         sourcesUrl = ""
-        logoFile = "logo.png"
+        logoFile = "assets/${modid}/logo.png"
         description = ""
 
         onFabric {
@@ -29,40 +37,33 @@ ModsDotGroovy.make {
         }
 
         dependencies {
-            onForge {
-                minecraft = this.minecraftVersionRange
-                forge = ">=${this.libs.versions.neoforge}"
-            }
-
-            onFabric {
-                minecraft = this.minecraftVersion
-                fabricloader = ">=${this.fabricLoaderVersion}"
-                mod('fabric-api') {
-                    versionRange = ">=${this.libs.versions.fabric.api.split("+")[0]}"
+            onNeoForge {
+                mod("neoforge") {
+                    versionRange = "${libs.versions.get("neoforge_range")}"
                 }
             }
-        }
-
-        onForge {
-            dependencies = dependencies.collect { dep ->
-                new Dependency() {
-                    @Override
-                    Map asForgeMap() {
-                        def map = dep.asForgeMap()
-                        def mandatory = map.mandatory
-                        map.remove('mandatory')
-                        map.put('type', mandatory ? 'required' : 'optional')
-                        return map
-                    }
+            onFabric {
+                minecraft = "${libs.versions.get("minecraft_range")}"
+                fabricloader = ">=${libs.versions.get("fabric_loader")}"
+                mod("fabric-api") {
+                    versionRange = libs.versions.get("fabric_api_range")
                 }
             }
         }
     }
 
+    onNeoForge {
+        mixins {
+            mixin("${modid}.mixins.json")
+            mixin("${modid}.neo.mixins.json")
+        }
+    }
+
     onFabric {
-        environment = "*"
-        mixin = [
-                modid + ".mixins.json"
-        ]
+        environment = Environment.ANY
+        mixins {
+            mixin("${modid}.mixins.json")
+            mixin("${modid}.fabric.mixins.json")
+        }
     }
 }

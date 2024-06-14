@@ -1,3 +1,5 @@
+import org.groovymc.modsdotgroovy.gradle.tasks.AbstractGatherPlatformDetailsTask
+
 plugins {
     id 'idea'
     id 'maven-publish'
@@ -10,6 +12,20 @@ base {
     archivesName = "${mod_name}-neo-${libs.versions.minecraft.release.get()}"
 }
 
+modsDotGroovy {
+    platform(org.groovymc.modsdotgroovy.types.core.Platform.NEOFORGE)
+    inferGather.set(false)
+    multiplatform {
+        from(":common")
+    }
+    apply()
+}
+
+tasks.named("gatherNeoForgePlatformDetails", AbstractGatherPlatformDetailsTask).configure {
+    minecraftVersion = libs.versions.minecraft.release
+    platformVersion = libs.versions.neoforge.release
+}
+
 loom {
     neoForge {
         if (Boolean.parseBoolean(at_enabled)) {
@@ -17,7 +33,7 @@ loom {
         }
     }
 
-    if (Boolean.parseBoolean(neoforge_mixin_enabled)) {
+    if (Boolean.parseBoolean(common_mixin_enabled) || Boolean.parseBoolean(neoforge_mixin_enabled)) {
         mixin {
             defaultRefmapName = "${mod_id}.refmap.json"
         }
