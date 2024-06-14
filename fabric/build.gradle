@@ -1,0 +1,48 @@
+plugins {
+    id 'idea'
+    id 'maven-publish'
+    id "consumer.conventions"
+    alias(libs.plugins.archloom)
+    alias(libs.plugins.mdg)
+}
+
+base {
+    archivesName = "${mod_name}-fabric-${libs.versions.minecraft.release.get()}"
+}
+
+loom {
+    if (Boolean.parseBoolean(at_enabled)) {
+        accessWidenerPath = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+    }
+
+    if (Boolean.parseBoolean(fabric_mixin_enabled)) {
+        mixin {
+            defaultRefmapName = "${mod_id}.refmap.json"
+        }
+    }
+
+    runs {
+        configureEach {
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        client {
+            client()
+            setConfigName("Fabric Client")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+        }
+    }
+}
+
+dependencies {
+    minecraft libs.minecraft
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.release.get()}@zip")
+    }
+    modImplementation libs.fabric.loader
+    modImplementation libs.fabric.api
+}

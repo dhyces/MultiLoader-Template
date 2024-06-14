@@ -1,23 +1,22 @@
 [versions]
-minecraft_release = "1.20.4"
-minecraft_range = "[1.20.4,1.21)"
-publish_range = "1.20.4"
+minecraft_release = "1.21"
+minecraft_range = "[1.21,1.22)"
+publish_range = "1.21"
 
-parchment_release = "2023.12.10"
-parchment_minecraft = "1.20.2"
+parchment_release = "2024.06.02"
+parchment_minecraft = "1.20.6"
 
-neoforge = "20.4.198"
+neoforge = "21.0.1-beta"
 
-fabric_loader = "0.15.7"
-fabric_api = "0.96.4+1.20.4"
+fabric_loader = "0.15.11"
+fabric_api = "0.100.1+1.21"
 
-mixinextras = "0.3.2"
+mixinextras = "0.3.6"
 
-jetbrains_annotations = "24.0.0"
+jetbrains_annotations = "24.1.0"
 
-mdg_release = "1.4.3"
-mdg_dsl = "1.5.1"
-archloom = "1.4.373"
+mdg_release = "2.0.0-beta.28"
+archloom = "1.6.397"
 
 curseforgegradle = "1.1.18"
 minotaur = "2.+"

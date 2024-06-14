@@ -1,10 +1,23 @@
 plugins {
     id 'maven-publish'
+    id "shared.conventions"
+    alias(libs.plugins.mdg)
     alias(libs.plugins.archloom)
 }
 
 base {
     archivesName = "${mod_name}-common-${libs.versions.minecraft.release.get()}"
+}
+
+modsDotGroovy {
+    multiplatform {
+        gather {
+            projectProperty("mod_id")
+            projectProperty("mod_name")
+            projectProperty("mod_author")
+        }
+        expose()
+    }
 }
 
 configurations {
@@ -20,13 +33,17 @@ configurations {
 }
 
 loom {
-//    accessWidenerPath = file("src/main/resources/trimmed.accesswidener")
+    if (Boolean.parseBoolean(at_enabled)) {
+        accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+    }
 
-//    mixin {
-//        defaultRefmapName = "modid.refmap.json"
-//    }
+    if (Boolean.parseBoolean(common_mixin_enabled)) {
+        mixin {
+            defaultRefmapName = "${mod_id}.refmap.json"
+        }
+    }
 
-    runConfigs.configureEach {
+    runs.configureEach {
         ideConfigGenerated = false
     }
 }
@@ -39,22 +56,14 @@ dependencies {
     }
 
     modCompileOnly libs.mixinextras.common
-
     modCompileOnly libs.fabric.loader
-}
-
-processResources {
-    def buildProps = project.properties.clone()
-    exclude("mods.groovy")
-
-    filesMatching(['pack.mcmeta']) {
-        expand buildProps
-    }
 }
 
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
-    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+    sourceSets.main.resources.sourceDirectories.forEach {
+        commonResources it
+    }
 }
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
@@ -62,30 +71,5 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 idea {
     module {
         inheritOutputDirs = false
-    }
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
-sourcesJar {
-    from(rootProject.file("LICENSE")) {
-        rename { "${it}_${mod_name}" }
-    }
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            from components.java
-            pom.withXml {
-                asNode().remove(asNode().dependencies)
-            }
-        }
     }
 }

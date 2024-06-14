@@ -1,0 +1,63 @@
+plugins {
+    id 'idea'
+    id 'maven-publish'
+    id "consumer.conventions"
+    alias(libs.plugins.mdg)
+    alias(libs.plugins.archloom)
+}
+
+base {
+    archivesName = "${mod_name}-neo-${libs.versions.minecraft.release.get()}"
+}
+
+loom {
+    neoForge {
+        if (Boolean.parseBoolean(at_enabled)) {
+            accessTransformer(project(":common").file("src/main/resources/META-INF/accessTransformer.cfg"))
+        }
+    }
+
+    if (Boolean.parseBoolean(neoforge_mixin_enabled)) {
+        mixin {
+            defaultRefmapName = "${mod_id}.refmap.json"
+        }
+    }
+
+    runs {
+        configureEach {
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+
+        client {
+            client()
+            setConfigName("Neo Client")
+        }
+        server {
+            server()
+            setConfigName("Neo Server")
+        }
+        data {
+            data()
+            setConfigName("Neo Data")
+
+            programArgs("'--mod', ${mod_id}, '--all', '--output', ${project(":common").file('src/generated/resources/')}, '--existing', ${file('src/main/resources/')}")
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = 'Neo'
+        url = 'https://maven.neoforged.net/releases'
+    }
+}
+
+dependencies {
+    minecraft libs.minecraft
+    neoForge libs.neoforge
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.release.get()}@zip")
+    }
+}
