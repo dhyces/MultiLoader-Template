@@ -18,7 +18,8 @@ mixinextras = "0.3.6"
 
 jetbrains_annotations = "24.1.0"
 
-archloom = "1.6.397"
+moddev = "2.0.42-beta"
+loom = "1.8.+"
 mdg_release = "2.0.0-beta.30"
 
 curseforgegradle = "1.1.25"
@@ -36,6 +37,7 @@ jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "j
 
 [plugins]
 mdg = { id = "org.groovymc.modsdotgroovy", version.ref = "mdg_release" }
-archloom = { id = "dev.architectury.loom", version.ref = "archloom" }
+moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
+loom = { id = "fabric-loom", version.ref = "loom" }
 curseforgegradle = { id = "net.darkhax.curseforgegradle", version.ref = "curseforgegradle" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }

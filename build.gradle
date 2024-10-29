@@ -1,4 +1,4 @@
 plugins {
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.9"
     alias(libs.plugins.mdg) apply(false)
-    alias(libs.plugins.archloom) apply(false)
 }

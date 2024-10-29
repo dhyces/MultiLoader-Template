@@ -4,7 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id "consumer.conventions"
-    alias(libs.plugins.archloom)
+    alias(libs.plugins.loom)
     alias(libs.plugins.mdg)
     alias(libs.plugins.curseforgegradle)
     alias(libs.plugins.minotaur)
