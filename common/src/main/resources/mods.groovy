@@ -7,7 +7,7 @@ MultiplatformModsDotGroovy.make {
     }
 
     license = "MIT"
-    issueTrackerUrl = ""
+    issueTrackerUrl = "https://www.example.com"
 
     onFabric {
         if (Boolean.parseBoolean(buildProperties["at_enabled"] as String)) {
@@ -28,10 +28,10 @@ MultiplatformModsDotGroovy.make {
         authors = [(buildProperties["authors"] as String)]
         version = environmentInfo.version
 
-        displayUrl = ""
-        sourcesUrl = ""
+        displayUrl = "https://www.example.com"
+        sourcesUrl = "https://www.example.com"
         logoFile = "assets/${modid}/logo.png"
-        description = ""
+        description = "Lorum ipsum"
 
         onFabric {
             entrypoints {

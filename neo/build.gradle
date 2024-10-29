@@ -6,6 +6,8 @@ plugins {
     id "consumer.conventions"
     alias(libs.plugins.mdg)
     alias(libs.plugins.archloom)
+    alias(libs.plugins.curseforgegradle)
+    alias(libs.plugins.minotaur)
 }
 
 base {
@@ -30,12 +32,6 @@ loom {
     neoForge {
         if (Boolean.parseBoolean(at_enabled)) {
             accessTransformer(project(":common").file("src/main/resources/META-INF/accessTransformer.cfg"))
-        }
-    }
-
-    if (Boolean.parseBoolean(common_mixin_enabled) || Boolean.parseBoolean(neoforge_mixin_enabled)) {
-        mixin {
-            defaultRefmapName = "${mod_id}.refmap.json"
         }
     }
 
@@ -75,5 +71,43 @@ dependencies {
     mappings loom.layered() {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.release.get()}@zip")
+    }
+}
+
+if (hasProperty("modrinth_write_version_pat")) {
+    modrinth {
+        token = findProperty("modrinth_write_version_pat") as String
+        projectId = properties["modrinth_project_id"] as String
+        versionName = "Fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        versionNumber = "${libs.versions.minecraft.release.get()}-${properties["mod_version"]}+neoforge"
+        versionType = properties["publish_type"] as String
+        uploadFile.set(tasks.remapJar)
+        gameVersions = List.of(libs.versions.publish.range.get().split(","))
+        loaders = List.of("neoforge")
+        changelog = rootProject.file("changelog.md").text
+        additionalFiles = List.of(tasks.named("sourcesJar"), tasks.named("javadocJar"))
+        detectLoaders = false
+        debugMode = properties["publish_debug"].toString().toBoolean()
+    }
+}
+
+if (hasProperty("curseforge_publishing_token")) {
+    tasks.register("curseforge", net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+        group = "publishing"
+
+        disableVersionDetection()
+        apiToken = findProperty("curseforge_publishing_token")
+        def projectId = properties["curseforge_project_id"]
+        def mainFile = upload(projectId, tasks.remapJar)
+        mainFile.displayName = "NeoForge-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        mainFile.releaseType = properties["publish_type"]
+        mainFile.changelog = rootProject.file("changelog.md").text
+        mainFile.changelogType = "markdown"
+        mainFile.addModLoader("NeoForge")
+        mainFile.addJavaVersion("Java ${java.toolchain.languageVersion.get()}")
+        mainFile.addGameVersion(libs.versions.minecraft.release.get())
+        debugMode = properties["publish_debug"].toString().toBoolean()
+
+        dependsOn(tasks.remapJar)
     }
 }
