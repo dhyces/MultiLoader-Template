@@ -29,7 +29,7 @@ tasks.named("gatherNeoForgePlatformDetails", AbstractGatherPlatformDetailsTask).
 }
 
 neoForge {
-    version = "21.3.4-beta"
+    version = version = libs.neoforge.get().version
 
     if (Boolean.parseBoolean(at_enabled)) {
         accessTransformers.from(project(":common").file("src/main/resources/META-INF/accesstransformer.cfg"))
