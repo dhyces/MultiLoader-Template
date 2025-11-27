@@ -1,29 +1,30 @@
 [versions]
-minecraft_release = "1.21.3"
-minecraft_range = "[1.21.3,1.21.4)"
-publish_range = "1.21.3"
+minecraft_release = "1.21.10"
+minecraft_range = "[1.21.10,1.21.11)"
+publish_range = "1.21.10"
 
-parchment_release = "2024.07.28"
-parchment_minecraft = "1.21"
+parchment_release = "2025.10.12"
+parchment_minecraft = "1.21.10"
 
 javafml_range = "[3,)"
-neoforge_release = "21.3.16-beta"
-neoforge_range = "[21.3.16-beta,21.4-beta)"
+neoforge_release = "21.10.52-beta"
+neoforge_range = "[21.10.52-beta,21.11)"
 
-fabric_loader = "0.16.7"
-fabric_api_release = "0.107.0+1.21.1"
-fabric_api_range = "[0.107.0,)"
+fabric_loader = "0.18.1"
+fabric_api_release = "0.138.3+1.21.10"
+fabric_api_range = "[0.138.3,)"
 
-mixin = "0.8.7"
-mixinextras = "0.3.6"
+neoform = "1.21.10-20251010.172816"
+mixin = "0.16.5+mixin.0.8.7"
+mixinextras = "0.5.0"
+asm = "9.7"
 
-jetbrains_annotations = "24.1.0"
+jetbrains_annotations = "26.0.2-1"
 
-moddev = "2.0.42-beta"
-loom = "1.8.+"
-mdg_release = "2.0.0-beta.30"
+moddev = "2.0.120"
+loom = "1.13.6"
 
-curseforgegradle = "1.1.25"
+curseforgegradle = "1.1.18"
 minotaur = "2.+"
 
 [libraries]
@@ -32,13 +33,12 @@ neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge_release"
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api_release" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
 
-mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
+mixin = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin" }
 mixinextras_common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinextras" }
 
 jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains_annotations" }
 
 [plugins]
-mdg = { id = "org.groovymc.modsdotgroovy", version.ref = "mdg_release" }
 moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
 loom = { id = "fabric-loom", version.ref = "loom" }
 curseforgegradle = { id = "net.darkhax.curseforgegradle", version.ref = "curseforgegradle" }
