@@ -1,11 +1,8 @@
-import org.groovymc.modsdotgroovy.gradle.tasks.AbstractGatherPlatformDetailsTask
-
 plugins {
     id 'idea'
     id 'maven-publish'
     id "consumer.conventions"
     alias(libs.plugins.loom)
-    alias(libs.plugins.mdg)
     alias(libs.plugins.curseforgegradle)
     alias(libs.plugins.minotaur)
 }
@@ -14,29 +11,14 @@ base {
     archivesName = "${mod_name}-fabric-${libs.versions.minecraft.release.get()}"
 }
 
-modsDotGroovy {
-    platform(org.groovymc.modsdotgroovy.types.core.Platform.FABRIC)
-    inferGather.set(false)
-    multiplatform {
-        from(":common")
-    }
-    apply()
-}
-
-tasks.named("gatherFabricPlatformDetails", AbstractGatherPlatformDetailsTask).configure {
-    minecraftVersion = libs.versions.minecraft.release
-    platformVersion = libs.versions.fabric.loader
-}
-
 loom {
-    if (Boolean.parseBoolean(at_enabled)) {
-        accessWidenerPath = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+    def awFile = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+    if (awFile.exists()) {
+        accessWidenerPath = awFile
     }
 
-    if (Boolean.parseBoolean(common_mixin_enabled) || Boolean.parseBoolean(fabric_mixin_enabled)) {
-        mixin {
-            defaultRefmapName = "${mod_id}.refmap.json"
-        }
+    mixin {
+        defaultRefmapName = "${mod_id}.refmap.json"
     }
 
     runs {
@@ -69,7 +51,7 @@ if (hasProperty("modrinth_write_version_pat")) {
     modrinth {
         token = findProperty("modrinth_write_version_pat") as String
         projectId = properties["modrinth_project_id"] as String
-        versionName = "Fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        versionName = "fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
         versionNumber = "${libs.versions.minecraft.release.get()}-${properties["mod_version"]}+fabric"
         versionType = properties["publish_type"] as String
         uploadFile.set(tasks.remapJar)
@@ -90,7 +72,7 @@ if (hasProperty("curseforge_publishing_token")) {
         apiToken = findProperty("curseforge_publishing_token")
         def projectId = properties["curseforge_project_id"]
         def mainFile = upload(projectId, tasks.remapJar)
-        mainFile.displayName = "Fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        mainFile.displayName = "fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
         mainFile.releaseType = properties["publish_type"]
         mainFile.changelog = rootProject.file("changelog.md").text
         mainFile.changelogType = "markdown"

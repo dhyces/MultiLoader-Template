@@ -1,10 +1,6 @@
-import org.groovymc.modsdotgroovy.gradle.tasks.AbstractGatherPlatformDetailsTask
-
 plugins {
-    id 'idea'
     id 'maven-publish'
     id "consumer.conventions"
-    alias(libs.plugins.mdg)
     alias(libs.plugins.moddev)
     alias(libs.plugins.curseforgegradle)
     alias(libs.plugins.minotaur)
@@ -14,25 +10,36 @@ base {
     archivesName = "${mod_name}-neoforge-${libs.versions.minecraft.release.get()}"
 }
 
-modsDotGroovy {
-    platform(org.groovymc.modsdotgroovy.types.core.Platform.NEOFORGE)
-    inferGather.set(false)
-    multiplatform {
-        from(":common")
+sourceSets {
+    datagen {
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath + main.output
     }
-    apply()
 }
 
-tasks.named("gatherNeoForgePlatformDetails", AbstractGatherPlatformDetailsTask).configure {
-    minecraftVersion = libs.versions.minecraft.release
-    platformVersion = libs.versions.neoforge.release
+configurations {
+    datagenCompile.extendsFrom compile
+    datagenCompileClasspath.extendsFrom compileClasspath
 }
 
 neoForge {
-    version = version = libs.neoforge.get().version
+    version = libs.neoforge.get().version
 
-    if (Boolean.parseBoolean(at_enabled)) {
-        accessTransformers.from(project(":common").file("src/main/resources/META-INF/accesstransformer.cfg"))
+    def atFile = project(":common").file("src/main/resources/META-INF/accessTransformer.cfg")
+    if (atFile.exists()) {
+        accessTransformers.from(atFile)
+    }
+
+    parchment {
+        minecraftVersion = libs.versions.parchment.minecraft.get()
+        mappingsVersion = libs.versions.parchment.release.get()
+    }
+
+    mods {
+        create("${mod_id}") {
+            sourceSet(sourceSets.main)
+            sourceSet(sourceSets.datagen)
+        }
     }
 
     runs {
@@ -45,10 +52,13 @@ neoForge {
             ideName = "Neo Server"
         }
         data {
-            data()
+            clientData()
             ideName = "Neo Data"
 
-            programArgument("'--mod', ${mod_id}, '--all', '--output', ${project(":common").dependencyProject.file('src/generated/resources/')}, '--existing', ${file('src/main/resources/')}")
+            sourceSet = sourceSets.datagen
+            loadedMods = [mods."${mod_id}"]
+
+            programArguments = ['--mod', mod_id, '--all', '--output', rootProject.project(":common").file('src/generated/resources/').absolutePath, '--existing', file('src/main/resources/').absolutePath]
         }
     }
 }
@@ -60,11 +70,12 @@ repositories {
     }
 }
 
+
 if (hasProperty("modrinth_write_version_pat")) {
     modrinth {
         token = findProperty("modrinth_write_version_pat") as String
         projectId = properties["modrinth_project_id"] as String
-        versionName = "Fabric-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        versionName = "neoforge-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
         versionNumber = "${libs.versions.minecraft.release.get()}-${properties["mod_version"]}+neoforge"
         versionType = properties["publish_type"] as String
         uploadFile.set(tasks.jar)
@@ -85,7 +96,7 @@ if (hasProperty("curseforge_publishing_token")) {
         apiToken = findProperty("curseforge_publishing_token")
         def projectId = properties["curseforge_project_id"]
         def mainFile = upload(projectId, tasks.jar)
-        mainFile.displayName = "NeoForge-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
+        mainFile.displayName = "neoforge-${libs.versions.minecraft.release.get()}-${properties["mod_version"]}"
         mainFile.releaseType = properties["publish_type"]
         mainFile.changelog = rootProject.file("changelog.md").text
         mainFile.changelogType = "markdown"

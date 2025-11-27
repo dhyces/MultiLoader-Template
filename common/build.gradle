@@ -1,27 +1,11 @@
 plugins {
     id 'idea'
     id "shared.conventions"
-    alias(libs.plugins.mdg)
     alias(libs.plugins.moddev)
 }
 
 base {
     archivesName = "${mod_name}-common-${libs.versions.minecraft.release.get()}"
-}
-
-modsDotGroovy {
-    multiplatform {
-        gather {
-            projectProperty("mod_id")
-            projectProperty("mod_name")
-            projectProperty("authors")
-            projectProperty("at_enabled")
-            projectProperty("common_mixin_enabled")
-            projectProperty("fabric_mixin_enabled")
-            projectProperty("neoforge_mixin_enabled")
-        }
-        expose()
-    }
 }
 
 configurations {
@@ -37,11 +21,26 @@ configurations {
 }
 
 neoForge {
-    // https://projects.neoforged.net/neoforged/neoform
-    neoFormVersion = "1.21.3-20241023.131943"
+    neoFormVersion = libs.versions.neoform.get()
+    // Automatically enable AccessTransformers if the file exists
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = libs.versions.parchment.minecraft.get()
+        mappingsVersion = libs.versions.parchment.release.get()
+    }
+}
 
-    if (Boolean.parseBoolean(at_enabled)) {
-        accessTransformers.from file("src/main/resources/META-INF/accesstransformer.cfg")
+// Vanilla depends on ASM 9.6, MDG makes that a 'strict' version constraint,
+// but mixin needs newer ASM so we override that here.
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "org.ow2.asm") {
+            details.useVersion(libs.versions.asm.get())
+            details.because("Mixin requires new ASM")
+        }
     }
 }
 
@@ -54,13 +53,5 @@ artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     sourceSets.main.resources.sourceDirectories.forEach {
         commonResources it
-    }
-}
-
-sourceSets.main.resources.srcDir 'src/generated/resources'
-
-idea {
-    module {
-        inheritOutputDirs = false
     }
 }
