@@ -1,0 +1,19 @@
+modLoader = "javafml"
+loaderVersion = "[3,)"
+license = "MIT"
+issueTrackerURL = "https://github.com/dhyces/examplemod/issues"
+
+[[mods]]
+modId = "examplemod"
+displayName = "Example Mod"
+authors = "dhyces"
+version = "0.1.0"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/examplemod"
+sourcesUrl = "https://github.com/dhyces/examplemod"
+logoFile = "assets/examplemod/logo.png"
+description = "Lorum ipsum!"
+
+[[dependencies.examplemod]]
+modId = "neoforge"
+versionRange = "[21.10.52-beta,21.11)"
+type = "required"
