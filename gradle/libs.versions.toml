@@ -38,6 +38,7 @@ mixin = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin" }
 mixinextras_common = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinextras" }
 
 jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains_annotations" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 [plugins]
 moddev = { id = "net.neoforged.moddev", version.ref = "moddev" }
