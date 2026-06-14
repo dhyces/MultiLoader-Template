@@ -12,6 +12,6 @@ public final class NeoPlatformHelper implements PlatformHelper {
 
     @Override
     public boolean isClientDist() {
-        return FMLLoader.getDist().isClient();
+        return FMLLoader.getCurrent().getDist().isClient();
     }
 }
