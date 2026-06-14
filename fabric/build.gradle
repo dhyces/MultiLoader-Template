@@ -19,16 +19,16 @@ loom {
 
     runs {
         configureEach {
-            ideConfigGenerated(true)
-            runDir("run")
+            setGenerateRunConfig(true)
+            setRunDirectory(file("run"))
         }
         client {
             client()
-            setConfigName("Fabric Client")
+            setDisplayName("Fabric Client")
         }
         server {
             server()
-            setConfigName("Fabric Server")
+            setDisplayName("Fabric Server")
         }
     }
 }
