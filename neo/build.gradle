@@ -30,10 +30,10 @@ neoForge {
         accessTransformers.from(atFile)
     }
 
-    parchment {
-        minecraftVersion = libs.versions.parchment.minecraft.get()
-        mappingsVersion = libs.versions.parchment.release.get()
-    }
+//    parchment {
+//        minecraftVersion = libs.versions.parchment.minecraft.get()
+//        mappingsVersion = libs.versions.parchment.release.get()
+//    }
 
     mods {
         create("${mod_id}") {
