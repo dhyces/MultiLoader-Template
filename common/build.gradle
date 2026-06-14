@@ -27,10 +27,10 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
-    parchment {
-        minecraftVersion = libs.versions.parchment.minecraft.get()
-        mappingsVersion = libs.versions.parchment.release.get()
-    }
+//    parchment {
+//        minecraftVersion = libs.versions.parchment.minecraft.get()
+//        mappingsVersion = libs.versions.parchment.release.get()
+//    }
 }
 
 // Vanilla depends on ASM 9.6, MDG makes that a 'strict' version constraint,
