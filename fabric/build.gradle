@@ -55,7 +55,7 @@ modrinth {
     versionName = "fabric-${libs.versions.minecraft.release.get()}-${version}"
     versionNumber = "${libs.versions.minecraft.release.get()}-${version}+fabric"
     versionType = publish_type
-    uploadFile.set(tasks.remapJar)
+    uploadFile.set(tasks.jar)
     gameVersions = List.of(libs.versions.publish.range.get().split(","))
     loaders = List.of("fabric")
     changelog = rootProject.file("changelog.md").text
@@ -72,7 +72,7 @@ tasks.register("curseforge", net.darkhax.curseforgegradle.TaskPublishCurseForge)
 
     disableVersionDetection()
     apiToken = findProperty("curseforge_publishing_token")
-    def mainFile = upload(curseforge_project_id, tasks.remapJar)
+    def mainFile = upload(curseforge_project_id, tasks.jar)
     mainFile.displayName = "fabric-${libs.versions.minecraft.release.get()}-${version}"
     mainFile.releaseType = publish_type
     mainFile.changelog = rootProject.file("changelog.md").text
