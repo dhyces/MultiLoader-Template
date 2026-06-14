@@ -15,5 +15,5 @@ description = "Lorum ipsum!"
 
 [[dependencies.examplemod]]
 modId = "neoforge"
-versionRange = "[21.10.52-beta,21.11)"
+versionRange = "[26.1.2.76,26.2)"
 type = "required"
