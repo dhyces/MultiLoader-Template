@@ -12,7 +12,7 @@
     "dhyces"
   ],
   "version": "0.1.0",
-  "icon": "assets/examplemod/logo.png",
+  "icon": "assets/examplemod/icon.png",
   "description": "Lorum ipsum!",
   "entrypoints": {
     "main": [
@@ -23,9 +23,9 @@
     ]
   },
   "depends": {
-    "minecraft": ">=26.1.2 <26.2",
+    "minecraft": ">=26.2 <26.3",
     "fabricloader": ">=0.19.3",
-    "fabric-api": ">=0.151.0"
+    "fabric-api": ">=0.156.0"
   },
   "environment": "*"
 }

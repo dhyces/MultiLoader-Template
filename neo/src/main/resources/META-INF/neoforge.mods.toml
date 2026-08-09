@@ -10,10 +10,15 @@ authors = "dhyces"
 version = "0.1.0"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/examplemod"
 sourcesUrl = "https://github.com/dhyces/examplemod"
-logoFile = "assets/examplemod/logo.png"
+iconFile = "assets/examplemod/icon.png"
 description = "Lorum ipsum!"
 
 [[dependencies.examplemod]]
+modId = "minecraft"
+versionRange = "[26.2,26.3.0-snapshot)"
+type = "required"
+
+[[dependencies.examplemod]]
 modId = "neoforge"
-versionRange = "[26.1.2.76,26.2)"
+versionRange = "[26.2.0.57,26.3.0.0-alpha)"
 type = "required"
